@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sample.employeeservice.dto.APIResponseDTO;
 import com.sample.employeeservice.dto.EmployeeDto;
 import com.sample.employeeservice.service.EmployeeService;
 
@@ -29,9 +29,9 @@ public class EmployeeController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<EmployeeDto> getEmployee(@PathVariable("id") Long employeeId) {
-		EmployeeDto employee = employeeService.getEmployeeById(employeeId);
-		return new ResponseEntity<EmployeeDto>(employee, HttpStatus.OK);
+	public ResponseEntity<APIResponseDTO> getEmployee(@PathVariable("id") Long employeeId) {
+		APIResponseDTO apiResponseDTO = employeeService.getEmployeeById(employeeId);
+		return new ResponseEntity<APIResponseDTO>(apiResponseDTO, HttpStatus.OK);
 	}
 
 }
