@@ -13,6 +13,7 @@ import com.sample.employeeservice.repository.EmployeeRepository;
 import com.sample.employeeservice.service.APIClient;
 import com.sample.employeeservice.service.EmployeeService;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -37,6 +38,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return savedEmployeeDto;
 	}
 
+	@CircuitBreaker(name = "${spring.application.name}", fallbackMethod = "getDefaultDepartment")
 	@Override
 	public APIResponseDTO getEmployeeById(Long employeeId) {
 		Employee employee = employeeRepository.findById(employeeId).get();
@@ -49,6 +51,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 //				.bodyToMono(DepartmentDto.class).block();
 
 		DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
+
+		EmployeeDto employeeDto = new EmployeeDto(employee.getId(), employee.getFirstName(), employee.getLastName(),
+				employee.getEmail(), employee.getDepartmentCode());
+		APIResponseDTO apiResponseDTO = new APIResponseDTO();
+		apiResponseDTO.setDepartmentDto(departmentDto);
+		apiResponseDTO.setEmployeeDto(employeeDto);
+		return apiResponseDTO;
+	}
+
+	public APIResponseDTO getDefaultDepartment(Long employeeId, Exception exception) {
+		Employee employee = employeeRepository.findById(employeeId).get();
+
+		DepartmentDto departmentDto = new DepartmentDto();
+		departmentDto.setDepartmentName("R&D Department");
+		departmentDto.setDepartmentCode("RD001");
+		departmentDto.setDepartmentDescription("Research and Development Department");
 
 		EmployeeDto employeeDto = new EmployeeDto(employee.getId(), employee.getFirstName(), employee.getLastName(),
 				employee.getEmail(), employee.getDepartmentCode());
