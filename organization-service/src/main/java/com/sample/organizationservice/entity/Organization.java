@@ -1,6 +1,5 @@
-package com.sample.employeeservice.entity;
+package com.sample.organizationservice.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,17 +15,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "employees")
-public class Employee {
+@Table(name = "organizations")
+public class Organization {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String firstName;
-	private String lastName;
-	@Column(nullable = false, unique = true)
-	private String email;
-	private String departmentCode;
+	private String organizationName;
+	private String organizationDescription;
 	private String organizationCode;
 
 }
